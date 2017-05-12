@@ -181,7 +181,7 @@ module Svn2Git
         if nominimizeurl
           cmd += "--no-minimize-url "
         end
-        cmd += "--trunk=#{@url}"
+        cmd += "--trunk='#{@url}'"
         run_command(cmd, true, true)
 
       else
@@ -316,7 +316,7 @@ module Svn2Git
         if @options[:rebase] && (@local.include?(branch) || branch == 'trunk')
            lbranch = branch
            lbranch = 'master' if branch == 'trunk'
-           run_command("git checkout -f \"#{lbranch}\"")
+           run_command("git checkout -f -b \"#{lbranch}\"")
            run_command("git rebase \"remotes/svn/#{branch}\"")
            next
         end
@@ -349,7 +349,7 @@ module Svn2Git
 
             @legacy_svn_branch_tracking_message_displayed = true
 
-            run_command("git checkout \"#{branch}\"")
+            run_command("git checkout -b \"#{branch}\" \"remotes/svn/#{branch}\"")
           end
         end
       end
@@ -362,7 +362,7 @@ module Svn2Git
         run_command("git branch -D master")
         run_command("git checkout -f -b master")
       else
-        run_command("git checkout -f master")
+        run_command("git checkout -f -b master")
       end
     end
 
